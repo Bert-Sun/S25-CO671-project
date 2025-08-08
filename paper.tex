@@ -547,7 +547,7 @@
 
 \title{CO 671 Final Project on Semidefinite Programming Integrality Gaps in Quantum Information}
 % If Title is too long, use \titlerunning
-%\titlerunning{Short Title}
+\titlerunning{SDP Integrality Gaps in Quantum Information}
 
 % Single insitute
 \author{Bert Sun}
@@ -555,7 +555,7 @@
 % If there are too many authors, use \authorrunning
 %\authorrunning{First Author et al.}
 
-\institute{Institute}
+\institute{University of Waterloo}
 
 %% Multiple insitutes - ALTERNATIVE to the above
 % \author{%
@@ -575,33 +575,150 @@
 
 \maketitle
 
-\begin{abstract}
-\lipsum[1]
+% \begin{abstract}
+% \lipsum[1]
 
-% \keywords{First keyword \and Second keyword \and Third keyword}
-\end{abstract}
+% % \keywords{First keyword \and Second keyword \and Third keyword}
+% \end{abstract}
 
 
 \section{Introduction}
 \label{sec:introduction}
-Semidefinite Programs (SDP) provide a modelling framework to optimize over positive semidefinite (PSD) matrices which partially characterizes many aspects of quantum information where quantum states, channels, and measurements are all required to be representable as a PSD matrix. 
+Semidefinite Programs (SDP) provide a modelling framework to optimize over positive semidefinite (PSD) matrices which partially characterizes many aspects of quantum information where quantum states, channels, and measurements are all required to be representable as a PSD matrix.
+As such, SDP formulations of quantum information theoretic problems have found widespread use in approximating optimal solution values to decide state separability \cite{DPShierarchy} and to the class of commutative strategies to nonlocal games \cite{NPAhierarchy}, along with providing exact algebraic characterizations for antidistinguishability of quantum states \cite{Johnston2025tightbounds}.
 
-\section{Conclusion and Outlook}
-\label{sec:outlook}
-\lipsum[1-2]
+In both of the above SDP approximation cases relating to state separability and the set of quantum correlations, no unconditional $\omega(1)$-round integrality gaps were known prior to work in \cite{Harrow_2019}.
+This project will review work by Harrow, Nataranjan, and Wu which unconditionally shows the above results independent of the Exponential Time Hypothesis, and discuss implications of their work in quantum information and complexity theory along with recent extensions.
 
-\subsubsection*{Acknowledgments}
+\section{Main Results}
+\label{sec:mainresults}
+\subsection{Notation and Conventions}
+\label{sec:notation}
+Throughout, calligraphic letters such as $\mcH, \mcK$ will denote Hilbert spaces.
+As is the convention in quantum information, subscripts and occasionally superscripts are used to denote membership.
+For example, a pure state belonging to $\mcH_A \otimes \mcH_B$ may be written as $\ket{\psi}_{AB}$.
+Additionally, a general quantum state represented by elements of $\Dens(\mcH)$ are trace 1 operators acting on $\mcH$.
+In an abuse of notation we write $\rho \in \mcH$ to denote a state $\rho$ belonging to the density matrices over $\mcH$.
+In general by identifying each Hilbert space with its dimension, we allow the dimension of $\mcH_A$ to be notated by $d_A$.
 
-Identification of funding sources and other support, and thanks to individuals and groups that assisted in the research and the preparation of the work should be included in an acknowledgment section, which is placed just before the reference section in your document \cite{acmart}.
+A state $\rho_{AB} \in \mcH_A \otimes \mcH_B$ is said to be \textit{product state} if there exist density matrices $\rho_A \in \mcH_A, \rho_B \in \mcH_B$ for which $\rho_{AB} = \rho_A \otimes \rho_B$.
+The set of \textit{separable states} is then the convex hull of product states.
+In particular:
+\[\Sep(d_A, d_B) := \conv(\{\rho \otimes \sigma : \rho \in \mcH_A, \sigma \in \mcH_B\})\]
+For an arbitrary Hermitian operator $M$ acting on $\mcH_A \otimes \mcH_B$ with $\norm{M}_{\text{op}} \le 1$, define
+\[h_{\Sep(d_A, d_B)}(M) := \max_{\rho\in \Sep(d_A, d_B)} \Tr(M\rho)\]
+% Since the optimal value is achieved on an extreme point (as $\Sep(d_A, d_B)$ is compact, convex in finite dimensions) this
+Furthermore, we shorthand $\Sep(d, d)$ by $\Sep^2(d)$.
+
+A \textit{quantum channel} refers to a completely positive, trace preserving map.
+
+We begin with a list of theorems stated informally.
+\subsection{Informal Statements of Main Results}
+\label{sec:informalmain}
+\begin{theorem}
+Any SDP relaxation of $h_{\Sep^2(d)}(\cdot)$ achieving $1/\poly(d)$ accuracy must have $\ge d^{\tilde{\Omega}(\log d)}$ variables.
+\end{theorem}
+In fact, the paper rules out a larger class of approximations which is referred to as \textit{SDP extended formulations}.
+
+As a corollary of the above, the paper also unconditionally affirms a version of Watrous' ``no approximate disentangler'' conjecture.
+Say a quantum channel $\mcN$ is an approximate disentangler from $D$ to $d\times d$ dimensions if $\Image(\mcN) \approx_\eps \Sep(d, d)$ where $\eps \in O(1/\poly(d))$.
+\begin{theorem}
+If $D = \dim(\mcH), d = \dim(\mcK)$ and $\Lambda : \Dens(\mcH) \to \Dens(\mcK\otimes \mcK)$ is an approximate disentangler, then
+\[D \ge d^{\tilde{\Omega}(\log d)}\]
+\end{theorem}
+While the above contributions relate to the DPS hierarchy for approximating the set of separable states, Harrow et al. also give lower bounds for the NPA hierarchy for calculating optimal non-local entangled game values.
+
+Briefly, a non-local game $\mcG = (\mcQ_A, \mcQ_B, \mathcal{O}_A, \mathcal{O}_B, V, \pi)$ consists of questions $\mcQ_A, \mcQ_B$ and answers $\mathcal{O}_A, \mathcal{O}_B$ given to Alice and Bob respectively, with victory conditions given by $V: \mcQ_A \times \mcQ_B \times \mathcal{O}_A \times \mathcal{O}_B \to \{0,1\}$ and probability distribution $\pi$ over the question set $\mcQ_A \times \mcQ_B$. 
+Alice and Bob are allowed to decide on a strategy beforehand, thereafter a referee then samples questions following $\pi$ and asks them to Alice and Bob separately who are then no longer allowed to communicate.
+The value of a game is then the best probability Alice and Bob have to win under a set of allowable classical or quantum correlations.
+The classical value is denoted by $\omega_c$, whereas if Alice and Bob are allowed to share a finite-dimensional state which they perform local measurements on, the tensor product value is denote by $\omega_q$.
+Local measurements commute, from which the appropriate generalization is to commuting measurements on a possibly infinite dimensional state, with optimal value denoted by $\omega_{qc}$.
+
+It has been known since work by Bell \cite{PhysicsPhysiqueFizika.1.195} that strategies in which Alice and Bob share an entangled state which they then perform local measurements on can outperform classical strategies.
+Further work by Tsirelson \cite{tsirelson1993some} bounds exactly how much better quantum strategies can outperform classical correlations (by a multiplicative factor of the Grothendieck constant relating to the dimension of space in which the quantum strategy lives) but also posed conjectures on whether the set of tensor product correlations was equal to the set of commuting correlations.
+Tsirelson's strong conjecture was disproved by Slofstra \cite{Slofstra_2019}, while the weak case known to be equivalent to the Conne's embedding problem \cite{MR2790067} stood until a complexity theoretic approach (in a move which frustrated many operator algebraists) refuted it \cite{ji2021mip}. To my best knowledge (a couple of Google searches) an explicit construction of a non-embeddable tracial von Neumann algebra has yet to be found.
+
+In relation to the above discussion, Harrow et al. also give unconditional lower bounds for the error of the ncSoS hierarchy along with minimal SDP dimensions achieving a desired accuracy:
+
+\begin{theorem}
+  There exists a sequence of non-local games $\mcG_n$ for which the quantum commuting value of the games $\omega_{qc}(\mcG_n) \le 1 - c/n^2$ for some constant $c$ but the ncSoS hierarchy believes $\omega_{qc}(\mcG_n) = 1$ up to level $m = \Omega(n)$.
+\end{theorem}
+
+\begin{theorem}
+  There exists a sequence of non-local games $\mcG_n$ for which any SDP relaxation approximating $\omega_{qc}(\mcG_n)$ with error $O(1/n^2)$ has dimension $\ge n^{\log n/\poly \log \log n}$.
+\end{theorem}
+
+In order to achieve the above results, Harrow et al. set up a framework to ``reduce'' integrality gap results from one problem to another.
+The reduction framework introduced provides a method allowing problems with known integrality gap bounds to be reduced to intermediate problems in smaller steps which may be more amenable to analysis which preserves the low degree solutions to produce tighter bounds.
+A more detailed analysis of these ideas will be given in section \ref{sec:techniques}.
+
+Using this above reduction framework, Harrow, Nataranjan, and Wu also extend results by Lee, Raghavendra, and Steurer in \cite{lee2014lowerboundssizesemidefinite} from boolean domains to non-boolean domains such as the hypersphere.
+Additionally, previous unconditional hardness of approximation results \cite{tulsiani2009csp,odonnell2014hardnessrobustgraphisomorphism} matching bounds given by either the Exponential Time Hypothesis or the Unique Games Conjecture operate solely over boolean domains.
+The paper produces the first unconditional results for SoS hardness problems over non-boolean domains.
+
+My belief is that this last contribution giving a framework to reduce known unconditional integrality gaps for well studied problems to unconditional integrality gaps other problems is the strongest contribution of the paper, and the previous 4 theorems only demonstrate an application of the approach.
+A more detailed criticism will be given later in section \ref{sec:criticisms}
+
+\section{Techniques and Proof Ideas}
+\label{sec:techniques}
+
+\subsection{The Category of Optimization Problems}
+\label{sec:optimizationdef}
+We give a rigorous definition to the class of optimization problems considered. 
+It should be noted that the original definition provided by Harrow et al. is not of a categorical flavour, but I believe a categorical lens offers a cleaner presentation of the main ideas encapsulating the definition while also providing additional tools and conjectures.
+
+\subsubsection{Objects:}
+The objects of the category of optimization problems will of course be a suitable definition of optimization problems.
+This leads to a definition which suitably encapsulates the ``size'' of optimization problems as a family.
+\begin{definition}\label{def:optprob:obj}
+  An object $A$ in the category of optimization problems is a sequence parameterized by $n \in \En$ of tuples $(\mcP_n^A, \Delta_n^A)$ of which:
+  \begin{itemize}
+    \item \textbf{Feasible Set}: $\mcP_n^A$ denotes a set of feasible solutions at each size $n$
+    \item \textbf{Instances}: $\Delta_n^A$ represents a set of optimization problem instances (\ie objective functions) as maps $\Phi: \mcP_n^A \to [0,1]$
+  \end{itemize}
+  Associated with every $n, \Phi \in \Delta_n^A$, it is also natural to consider the optimal value of the instance denoted by
+  \[\OPT(\Phi) \coloneq \max_{x\in \mcP_n^A} \Phi(x)\]
+\end{definition}
+This definition encapsulates a very broad definition of optimization problems, and in particular admits an (uncountably) infinite number of characterizations by a reindexing of the sequence which defines such a problem.
+To this extent, we consider only ``well-formed'' objects where the sequence is indexed correctly by a size which admits a run-time theoretic interpretation.
+For example, in the context of semi-definite programs we may consider each $\mcP_n^{\text{SDP}}$ to be the set of all $n\times n$ PSD matrices.
+Note that in general any affine function on the set of $n\times n$ PSD matrices does not have range contained in $[0,1]$, but we can simply consider $[0,1]$ isomorphic to the 2-point compactification of the reals and the instances in the above definition will then just be the pullback of any affine function by this isomorphism ($\arctan$, for example).
+
+Combined with the above observation that the instances having co-domain $[0,1]$ is equivalent to the instances having co-domain of the extended reals, we draw notice to that the above definition is robust.
+This is because we may consider any class of optimization instances at size $n$(which may not all have the same feasible region) and define the feasible region at size $n$ to be the union over all such instance feasible regions, and encode infeasibility as having objective value $0$.
+
+The restriction to having co-domain $[0,1]$ is natural, however, when considering the specialization to the class of problems at hand.
+
+\begin{definition}
+  A \textit{polynomial} optimization problem is one where each $\mcP_n^A$ is a variety (affine, in the algebraic geometry sense) of $\Ree^n$ given by at $m = m(n)$ polynomial equality constraints.
+\end{definition}
+A special case of a polynomial optimization problem is:
+\begin{definition}
+  A \textit{boolean} optimization problem is given by the polynomial constraints $x_i^2 = 1$. As such $\mcP_n^{bool}$ is the hypercube $\{-1,1\}^n$ for every $n$.
+\end{definition}
+\begin{definition}
+  A \textit{constraint satisfaction problem} is a boolean optimization problem where each instance is defined by a collection of \textit{clauses} $\{h_1, ..., h_k\}$ where each $h_i : \{\pm 1\}^n \to \{0,1\}$ is boolean, with objective value counting the normalized number of clauses satisfied for some assignment of variables.
+\end{definition}
+
+\section{Criticisms}
+\label{sec:critisms}
+uwu
+% \section{Conclusion and Outlook}
+% \label{sec:outlook}
+% \lipsum[1-2]
+
+% \subsubsection*{Acknowledgments}
+
+% Identification of funding sources and other support, and thanks to individuals and groups that assisted in the research and the preparation of the work should be included in an acknowledgment section, which is placed just before the reference section in your document
 
 %%% ===============================================================================
 %%% Bibliography
 %%% ===============================================================================
 
-In the bibliography, use \texttt{\textbackslash textsuperscript} for \enquote{st}, \enquote{nd}, \ldots:
-E.g., \enquote{The 2\textsuperscript{nd} conference on examples}.
-When you use \href{https://www.jabref.org}{JabRef}, you can use the clean up command to achieve that.
-See \url{https://help.jabref.org/en/CleanupEntries} for an overview of the cleanup functionality.
+% In the bibliography, use \texttt{\textbackslash textsuperscript} for \enquote{st}, \enquote{nd}, \ldots:
+% E.g., \enquote{The 2\textsuperscript{nd} conference on examples}.
+% When you use \href{https://www.jabref.org}{JabRef}, you can use the clean up command to achieve that.
+% See \url{https://help.jabref.org/en/CleanupEntries} for an overview of the cleanup functionality.
 
 \renewcommand{\bibsection}{\section*{References}} % requried for natbib to have "References" printed and as section*, not chapter*
 % Use natbib compatbile splncs04nat style.
@@ -615,10 +732,10 @@ See \url{https://help.jabref.org/en/CleanupEntries} for an overview of the clean
 \endgroup
 
 % Enfore empty line after bibliography
-\ \\
-%
-\noindent
-All links were last followed on October 5, 2020.
+% \ \\
+% %
+% \noindent
+% All links were last followed on October 5, 2020.
 
 %%% ===============================================================================
 %\appendix

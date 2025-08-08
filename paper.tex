@@ -31,7 +31,7 @@
 % To disable outputting page headers and footers, remove "runningheads"
 \documentclass[runningheads,a4paper,english]{llncs}[2022/01/12]
 
-\usepackage{amsmath, amssymb, mathtools}
+\usepackage{amsmath, amssymb, mathtools, mathrsfs}
 
 \usepackage{iftex}
 
@@ -601,8 +601,8 @@ Additionally, a general quantum state represented by elements of $\Dens(\mcH)$ a
 In an abuse of notation we write $\rho \in \mcH$ to denote a state $\rho$ belonging to the density matrices over $\mcH$.
 In general by identifying each Hilbert space with its dimension, we allow the dimension of $\mcH_A$ to be notated by $d_A$.
 
-A state $\rho_{AB} \in \mcH_A \otimes \mcH_B$ is said to be \textit{product state} if there exist density matrices $\rho_A \in \mcH_A, \rho_B \in \mcH_B$ for which $\rho_{AB} = \rho_A \otimes \rho_B$.
-The set of \textit{separable states} is then the convex hull of product states.
+A state $\rho_{AB} \in \mcH_A \otimes \mcH_B$ is said to be \emph{product state} if there exist density matrices $\rho_A \in \mcH_A, \rho_B \in \mcH_B$ for which $\rho_{AB} = \rho_A \otimes \rho_B$.
+The set of \emph{separable states} is then the convex hull of product states.
 In particular:
 \[\Sep(d_A, d_B) := \conv(\{\rho \otimes \sigma : \rho \in \mcH_A, \sigma \in \mcH_B\})\]
 For an arbitrary Hermitian operator $M$ acting on $\mcH_A \otimes \mcH_B$ with $\norm{M}_{\text{op}} \le 1$, define
@@ -610,15 +610,14 @@ For an arbitrary Hermitian operator $M$ acting on $\mcH_A \otimes \mcH_B$ with $
 % Since the optimal value is achieved on an extreme point (as $\Sep(d_A, d_B)$ is compact, convex in finite dimensions) this
 Furthermore, we shorthand $\Sep(d, d)$ by $\Sep^2(d)$.
 
-A \textit{quantum channel} refers to a completely positive, trace preserving map.
+A \emph{quantum channel} refers to a completely positive, trace preserving map.
 
 We begin with a list of theorems stated informally.
 \subsection{Informal Statements of Main Results}
 \label{sec:informalmain}
 \begin{theorem}
-Any SDP relaxation of $h_{\Sep^2(d)}(\cdot)$ achieving $1/\poly(d)$ accuracy must have $\ge d^{\tilde{\Omega}(\log d)}$ variables.
+Any SDP extended formulations of $h_{\Sep^2(d)}(\cdot)$ achieving $1/\poly(d)$ accuracy must have $\ge d^{\tilde{\Omega}(\log d)}$ variables.
 \end{theorem}
-In fact, the paper rules out a larger class of approximations which is referred to as \textit{SDP extended formulations}.
 
 As a corollary of the above, the paper also unconditionally affirms a version of Watrous' ``no approximate disentangler'' conjecture.
 Say a quantum channel $\mcN$ is an approximate disentangler from $D$ to $d\times d$ dimensions if $\Image(\mcN) \approx_\eps \Sep(d, d)$ where $\eps \in O(1/\poly(d))$.
@@ -645,14 +644,15 @@ In relation to the above discussion, Harrow et al. also give unconditional lower
 \end{theorem}
 
 \begin{theorem}
-  There exists a sequence of non-local games $\mcG_n$ for which any SDP relaxation approximating $\omega_{qc}(\mcG_n)$ with error $O(1/n^2)$ has dimension $\ge n^{\log n/\poly \log \log n}$.
+  There exists a sequence of non-local games $\mcG_n$ for which any SDP extended formulation approximating $\omega_{qc}(\mcG_n)$ with error $O(1/n^2)$ has dimension $\ge n^{\log n/\poly \log \log n}$.
 \end{theorem}
 
 In order to achieve the above results, Harrow et al. set up a framework to ``reduce'' integrality gap results from one problem to another.
 The reduction framework introduced provides a method allowing problems with known integrality gap bounds to be reduced to intermediate problems in smaller steps which may be more amenable to analysis which preserves the low degree solutions to produce tighter bounds.
 A more detailed analysis of these ideas will be given in section \ref{sec:techniques}.
 
-Using this above reduction framework, Harrow, Nataranjan, and Wu also extend results by Lee, Raghavendra, and Steurer in \cite{lee2014lowerboundssizesemidefinite} from boolean domains to non-boolean domains such as the hypersphere.
+Using this above reduction framework, Harrow, Nataranjan, and Wu also extend results by Lee, Raghavendra, and Steurer in \cite{lee2014lowerboundssizesemidefinite} from boolean domains to non-boolean domains such as the hypersphere. The LRS paper allows one to take integrality gaps in SoS formulations and generalize them to a larger class of SDP extended formulations.
+
 Additionally, previous unconditional hardness of approximation results \cite{tulsiani2009csp,odonnell2014hardnessrobustgraphisomorphism} matching bounds given by either the Exponential Time Hypothesis or the Unique Games Conjecture operate solely over boolean domains.
 The paper produces the first unconditional results for SoS hardness problems over non-boolean domains.
 
@@ -671,7 +671,7 @@ It should be noted that the original definition provided by Harrow et al. is not
 The objects of the category of optimization problems will of course be a suitable definition of optimization problems.
 This leads to a definition which suitably encapsulates the ``size'' of optimization problems as a family.
 \begin{definition}\label{def:optprob:obj}
-  An object $A$ in the category of optimization problems is a sequence parameterized by $n \in \En$ of tuples $(\mcP_n^A, \Delta_n^A)$ of which:
+  An object $\mathscr{A}$ in the category of optimization problems is a sequence parameterized by $n \in \En$ of tuples $(\mcP_n^A, \Delta_n^A)$ of which:
   \begin{itemize}
     \item \textbf{Feasible Set}: $\mcP_n^A$ denotes a set of feasible solutions at each size $n$
     \item \textbf{Instances}: $\Delta_n^A$ represents a set of optimization problem instances (\ie objective functions) as maps $\Phi: \mcP_n^A \to [0,1]$
@@ -690,18 +690,95 @@ This is because we may consider any class of optimization instances at size $n$(
 The restriction to having co-domain $[0,1]$ is natural, however, when considering the specialization to the class of problems at hand.
 
 \begin{definition}
-  A \textit{polynomial} optimization problem is one where each $\mcP_n^A$ is a variety (affine, in the algebraic geometry sense) of $\Ree^n$ given by at $m = m(n)$ polynomial equality constraints.
+  A \emph{polynomial} optimization problem is one where each $\mcP_n^A$ is a variety (affine, in the algebraic geometry sense) of $\Ree^n$ given by at $m = m(n)$ polynomial equality constraints.
 \end{definition}
 A special case of a polynomial optimization problem is:
 \begin{definition}
-  A \textit{boolean} optimization problem is given by the polynomial constraints $x_i^2 = 1$. As such $\mcP_n^{bool}$ is the hypercube $\{-1,1\}^n$ for every $n$.
+  A \emph{boolean} optimization problem is given by the polynomial constraints $x_i^2 = 1$. As such $\mcP_n^{bool}$ is the hypercube $\{-1,1\}^n$ for every $n$.
 \end{definition}
 \begin{definition}
-  A \textit{constraint satisfaction problem} is a boolean optimization problem where each instance is defined by a collection of \textit{clauses} $\{h_1, ..., h_k\}$ where each $h_i : \{\pm 1\}^n \to \{0,1\}$ is boolean, with objective value counting the normalized number of clauses satisfied for some assignment of variables.
+  A \emph{constraint satisfaction problem} is a boolean optimization problem where each instance is defined by a collection of \emph{clauses} $\{h_1, ..., h_k\}$ where each $h_i : \{\pm 1\}^n \to \{0,1\}$ is boolean, with objective value counting the normalized number of clauses satisfied for some assignment of variables.
 \end{definition}
 
+For the specific class of polynomial optimization problems, we wish to further define specific solutions which will allow us to identify integrality gaps.
+
+\begin{definition}
+  A \emph{degree-$d$ pseudo-expectation} $\tilde{\mbE}$ is a linear functional from $\Ree[x]^*$ satisfying:
+  \begin{itemize}
+    \item \textbf{Normalization:} $\tilde{\mbE}[1] = 1$
+    \item \textbf{Degree-$d$ Positivity:} $\tilde{\mbE}[p^2] \ge 0$ for any degree-$d/2$ polynomial $p$.
+  \end{itemize}
+  Furthermore, say $\tilde{\mbE}$ satisfies the constraints $\{g_i\}$ if $\tilde{\mbE}[g_iq] = 0$ for every $i$ and degree $d-\deg(g_i)$ polynomial $q$.
+\end{definition}
+SDP duality associated with the SoS formulation then implies that the degree-$d$ SoS relaxation of finding the maximum value of a function $f$ on an affine variety defined by constraints $\{g_i\}$ is given by
+\[f_{\max}^d = \max\{\tilde{\mbE}[f] : \tilde{\mbE} \text{ is a degree-$d$ pseudo-expectation satisfying } g_i\}\]
+\begin{definition}
+  Let $\Phi_n^A$ be an instance of an optimization problem $\mathscr{A}$.
+  A \emph{degree-$d$ value-$c$ pseudo-solution} for $\Phi_n^A$ is a degree-$d$ pseudo-expectation $\tilde{\mbE}$ satisfying the constraints defining $\mcP_n^A$ such that $\tilde{\mbE}[\Phi_n^A] \ge c$
+\end{definition}
+Notice that a degree-$d$ value-$c$ pseudo-solution is feasible in the degree-$d$ SoS relaxation.
+Exhibiting such a pseudo-solution then implies that the SoS relaxation believes the optimal value of $\Phi_n^A$ is at least $c$, and if the true optimum is lower then this pseudo-solution exhibits an integrality gap for a SoS approach to SDP relaxations.
+This is formalized below:
+\begin{definition}
+  Let $d, c, s$ be functions of $n$, along with the constraint that $0\le s < c \le 1$. Say a collection $\{\Phi_n^A\}$ exhibits a degree-$d$ value-$(c,s)$ integrality gap for a polynomial optimization problem $\mathscr{A}$ if for some $n_0$:
+  \begin{itemize}
+    \item $\OPT(\Phi_n^A) \le s(n)$ for all $n \ge n_0$
+    \item $\exists$ a degree-$d$ value-$c$ pseudo-solution $\tilde{\mbE}_n$ for $\Phi_n^A$ for all $n\ge n_0$.
+  \end{itemize}
+\end{definition}
+
+\subsubsection{Morphisms:}
+A category would not be complete without the proper morphisms.
+To this extent we will define the appropriate morphisms for the category of all optimization problems, then define subcategories which preserve valuable properties to allow us to show the existence of an integrality gap.
+
+\begin{definition}
+  A morphism (reduction) $R : \mathscr{A} \to \mathscr{B}$ in the category of optimization problems is a collection of maps which identifies sizes and instances of problems. In particular, $R$ consists of:
+  \begin{itemize}
+    \item $m : \En \to \En$ which maps problems of size $n$ in $\mathscr{A}$ to problems of size $m = m(n)$ in $\mathscr{B}$
+    \item $\iota_n: \Delta_n^A \to \Delta_m^A$ mapping every instance of a size $n$ problem in $\mathscr{A}$ to a problem in $\mathscr{B}$ of the appropriate size $m = m(n)$.
+  \end{itemize}
+  Under a standard abuse of notation, given a reduction from $\mathscr{A}$ to $\mathscr{B}$ we refer to the image of an instance $\Phi \in \Delta_n^A$ under the appropriate map by 
+  \[R(\Phi) \coloneq \iota_n(\Phi) \in \Delta_{m(n)}^B\]
+  When talking about a reduction and $n$ is fixed, allow $m$ to denote $m(n)$.
+\end{definition}
+It is clear by definition that our morphisms are transitive.
+
+We can then categorically justify our ``well-formed'' notion above by considering its skeleton category (where we quotient out isomorphism classes of objects) and choosing the distinguished representative object of each isomorphism class to be the representative in which the sequence indexing correctly represents a complexity-theoretic notion of problem size.
+Since we are working with sets our category is small and the skeleton is well-defined.
+
+By considering a category to be equivalent to its skeleton, from here onwards when we refer to the category of optimization problems we mean the skeleton category of optimization problems as defined by the objects and morphisms above unless stated otherwise.
+
+\subsubsection{Important Subcategories}
+We will define these subcategories as subcategories of the original (non-skeletal) category.
+We do not show that the isomorphisms are indeed present in the subcategories which allows them to be well defined in the quotient skeleton category.
+It is furthermore also possible that the complexity notions each of the subcategories capture is lost when factoring through the equivalence of categories to the skeleton, but I believe it should still be true.
+
+\begin{definition}
+  Given $s, t : \En \to [0,1]$, say a reduction is $(s, t)$\emph{-approximate} if:
+  \[\OPT(\Phi_n^A) \le s(n) \imps \OPT(R(\Phi_n^A)) \le t(m)\]
+\end{definition}
+\begin{definition}
+  Say a reduction is \emph{embedding} if there exists a family of maps $E_n : \mcP_n^A \to \mcP_m^B$ such that for any instance $\Phi_n^A$ and $x \in \mcP_n^A$:
+  \[\Phi_n^A(x) = R(\Phi_n^A)[E_n(x)]\]
+\end{definition}
+\begin{definition}
+  Say a reduction is $(d^A, c^A, d^B, c^B)$ \emph{pseudo-solution preserving} if for any instance $\Phi_n^A$ for which a degree-$d_n^A$ value-$c_n^A$ pseudo-solution exists, then there exists a degree-$d_m^B$ value $c_m^B$ pseudo-solution to $R(\Phi_n^A)$. Here $d^A, c^A, d^B, c^B$ are functions of $n$, with $d_n^A \coloneq d^A(n)$ and $d_m^B \coloneq d^B(m)$, similarly for $c$.
+\end{definition}
+\begin{proposition}
+  The above approximate, embedding, and pseudo-solution preserving properties are transitive and thus define a subcategory.
+\end{proposition}
+The value of producing these definitions is in their interpretation: approximate reductions are sound, embedding reductions are complete in a strong sense.
+This additional strength of the completeness of the reduction was required to reduce SoS integrality gaps to a larger class of SDP formulations.
+Additionally, the last definition provides a method to produce an integrality gap for a problem $\mathscr{B}$ given an appropriate reduction from $\mathscr{A}$ with a known integrality gap:
+\begin{proposition}
+  Let $\mathscr{A}, \mathscr{B}$ be polynomial optimization problems. If $\mathscr{A}$ has a degree-$d^A$ value-$(c^A, s^A)$ integrality gap, and there exists a $(s^A, s^B)$-approximate, $(d^A, c^A, d^B, c^B)$-pseudo-solution preserving reduction $R$ from $\mathscr{A}$ to $\mathscr{B}$, then there exists a degree-$d^B$ value-$(c^B, s^B)$ integrality gap for $\mathscr{B}$.
+\end{proposition}
+\begin{proof}
+  Follows from the definitions by applying $R$ to the integrality gap exhibiting family for $\mathscr{A}$ to produce one for $\mathscr{B}$.
+\end{proof}
+
 \section{Criticisms}
-\label{sec:critisms}
+\label{sec:criticisms}
 uwu
 % \section{Conclusion and Outlook}
 % \label{sec:outlook}

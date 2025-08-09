@@ -849,7 +849,13 @@ Does there exist a final object in the subcategory of SoS approxi-mation-hard pr
 This above is equivalent to a completeness property.
 It would also be interesting to investigate the intersection of these SoS approximation-hard problems with MAX-SNP problems introduced by \cite{PAPADIMITRIOU1991425}.
 It is noteworthy that there is a reduction presented which reduces \textsc{3XOR} to asking if a graph is 3-colourable, which is we may ask as a MAX-SNP problem.
-This is further reduced to a question about $h_{\Sep}$
+This is further reduced to a question about $h_{\Sep^{O(\sqrt{n})}(n)}$ which implements the Chen-Drucker \cite{chen2010shortmultiproverquantumproofs} QMA protocol to answer MAX-3SAT with completeness $1-\exp(-\Omega(n))$ and soundness $1-\Omega(1)$.
+It is noteworthy that MAX-3SAT is MAX SNP-complete.
+Following these ideas, one can also embed any boolean CSP as a tripartite non-local game with a pseudo-telepathic strategy if and only if the CSP is satisfiable \cite{preda2011non}.
+This should not be too surprising as boolean CSP is only NP-hard whereas the decision problem of whether a non-local game has entangled value of 1 or less than $1/2$ is undecidable \cite{ji2021mip}.
+
+Additionally, a quantum counterpart to the UGC has been proposed \cite{mousavi2024quantumuniquegamesconjecture} which extends NP-hard problems to quantum undecidable counterparts.
+There seems to be areas of overlap between these ideas and may be worthwhile to investigate.
 
 \begin{conjecture}
 Is the LRS procedure functorial?
@@ -866,7 +872,8 @@ With wider acceptance of this framework it would seem that a lot of approximatio
 We discuss a few connections to SDP approximations and the Unique Games Conjecture covered in CO 671:
 \subsection{SDP Approximations}
 The bulk of the paper essentially discusses unconditional bounds for the approximation capacity of SDPs in the context of quantum information.
-Though not the focus point of this particular paper, it makes heavy use of prior results relating to SDP relaxations to solve state separability problems and 
+Though not the focus point of this particular paper, it makes heavy use of prior results relating to SDP relaxations to solve state separability problems and SDP approximations to quantum commuting value of a non-local game.
+The Lov\'asz-Schrijver hierarchy was studied in class, but admits refinements by the Lasserre (SoS) hierarchy \cite{laurent2003comparison}.
 
 \section{Criticisms}
 \label{sec:criticisms}

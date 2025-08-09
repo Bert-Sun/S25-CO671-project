@@ -615,16 +615,19 @@ A \emph{quantum channel} refers to a completely positive, trace preserving map.
 We begin with a list of theorems stated informally.
 \subsection{Informal Statements of Main Results}
 \label{sec:informalmain}
-\begin{theorem}
+\begin{theorem}\label{thm:1}
 Any SDP extended formulations of $h_{\Sep^2(d)}(\cdot)$ achieving $1/\poly(d)$ accuracy must have $\ge d^{\tilde{\Omega}(\log d)}$ variables.
 \end{theorem}
 
 As a corollary of the above, the paper also unconditionally affirms a version of Watrous' ``no approximate disentangler'' conjecture.
 Say a quantum channel $\mcN$ is an approximate disentangler from $D$ to $d\times d$ dimensions if $\Image(\mcN) \approx_\eps \Sep(d, d)$ where $\eps \in O(1/\poly(d))$.
-\begin{theorem}
+Note that $\eps$-closeness for two compact sets is the same as asking for the Pompeiu-Hausdorff distance (with respect to the 1-Schatten/trace norm)to be at most $\eps$.
+\begin{theorem}\label{thm:2}
 If $D = \dim(\mcH), d = \dim(\mcK)$ and $\Lambda : \Dens(\mcH) \to \Dens(\mcK\otimes \mcK)$ is an approximate disentangler, then
 \[D \ge d^{\tilde{\Omega}(\log d)}\]
 \end{theorem}
+Note that the above two results hide multiplicative factors of $1/\poly \log\log(d)$ in the $\tilde{\Omega}$.
+
 While the above contributions relate to the DPS hierarchy for approximating the set of separable states, Harrow et al. also give lower bounds for the NPA hierarchy for calculating optimal non-local entangled game values.
 
 Briefly, a non-local game $\mcG = (\mcQ_A, \mcQ_B, \mathcal{O}_A, \mathcal{O}_B, V, \pi)$ consists of questions $\mcQ_A, \mcQ_B$ and answers $\mathcal{O}_A, \mathcal{O}_B$ given to Alice and Bob respectively, with victory conditions given by $V: \mcQ_A \times \mcQ_B \times \mathcal{O}_A \times \mathcal{O}_B \to \{0,1\}$ and probability distribution $\pi$ over the question set $\mcQ_A \times \mcQ_B$. 
@@ -639,17 +642,17 @@ Tsirelson's strong conjecture was disproved by Slofstra \cite{Slofstra_2019}, wh
 
 In relation to the above discussion, Harrow et al. also give unconditional lower bounds for the error of the ncSoS hierarchy along with minimal SDP dimensions achieving a desired accuracy:
 
-\begin{theorem}
+\begin{theorem}\label{thm:3}
   There exists a sequence of non-local games $\mcG_n$ for which the quantum commuting value of the games $\omega_{qc}(\mcG_n) \le 1 - c/n^2$ for some constant $c$ but the ncSoS hierarchy believes $\omega_{qc}(\mcG_n) = 1$ up to level $m = \Omega(n)$.
 \end{theorem}
 
-\begin{theorem}
+\begin{theorem}\label{thm:4}
   There exists a sequence of non-local games $\mcG_n$ for which any SDP extended formulation approximating $\omega_{qc}(\mcG_n)$ with error $O(1/n^2)$ has dimension $\ge n^{\log n/\poly \log \log n}$.
 \end{theorem}
 
 In order to achieve the above results, Harrow et al. set up a framework to ``reduce'' integrality gap results from one problem to another.
 The reduction framework introduced provides a method allowing problems with known integrality gap bounds to be reduced to intermediate problems in smaller steps which may be more amenable to analysis which preserves the low degree solutions to produce tighter bounds.
-A more detailed analysis of these ideas will be given in section \ref{sec:techniques}.
+A more detailed analysis of these ideas will be given in \cref{sec:techniques}.
 
 Using this above reduction framework, Harrow, Nataranjan, and Wu also extend results by Lee, Raghavendra, and Steurer in \cite{lee2014lowerboundssizesemidefinite} from boolean domains to non-boolean domains such as the hypersphere. The LRS paper allows one to take integrality gaps in SoS formulations and generalize them to a larger class of SDP extended formulations.
 
@@ -657,7 +660,7 @@ Additionally, previous unconditional hardness of approximation results \cite{tul
 The paper produces the first unconditional results for SoS hardness problems over non-boolean domains.
 
 My belief is that this last contribution giving a framework to reduce known unconditional integrality gaps for well studied problems to unconditional integrality gaps other problems is the strongest contribution of the paper, and the previous 4 theorems only demonstrate an application of the approach.
-A more detailed criticism will be given later in section \ref{sec:criticisms}
+A more detailed criticism will be given later in \cref{sec:criticisms}
 
 \section{Techniques and Proof Ideas}
 \label{sec:techniques}
@@ -776,6 +779,94 @@ Additionally, the last definition provides a method to produce an integrality ga
 \begin{proof}
   Follows from the definitions by applying $R$ to the integrality gap exhibiting family for $\mathscr{A}$ to produce one for $\mathscr{B}$.
 \end{proof}
+From the above proposition, it then suffices to produce a sequence of approximate, pseudo-solution preserving reductions from a problem with known integrality gap to the one we wish to answer.
+In the case of \cref{thm:1,thm:2} the sequence of reductions is:
+\begin{theorem}\label{thm:5}
+  There exists a sequence of reductions:
+  \[\textsc{3XOR} \imps \textsc{2-out-of-4-SAT-EQ} \imps \textsc{QMA(2)-Honest} \imps h_{\Sep^2(n^{\sqrt{n}})}\]
+  Each of which is $(n, 1, \Omega(n), 1)$-pseudo-solution preserving.
+  The first is $(1/2+\eps, 1-\delta)$-approximate for some constant $\delta$, and the second is a family of $(1-\delta, \eps)$-approximate for any $\eps$. The third is exact.
+\end{theorem}
+Where \textsc{2-out-of-4-SAT-EQ} is the boolean satisfiability problem where we ask for every clause to have 4 variables and exactly 2 of the 4 to be true, and \textsc{QMA(2)-Honest} is the probability that an honest QMA(2) prover following a specific protocol accepts an input string.
+The exact protocol used in the definition we omit here, but refer to \cite{aaronson2008powerunentanglement,harrow2013testing} for a first $k$-partite definition followed by a reduction from $k$-partite provers to bipartite provers.
+
+Both of the first two reductions are a technical rework of previously known results from \cite{aaronson2008powerunentanglement,harrow2013testing} just reframed in the context of the reduction framework posed.
+
+Next, to extend the above SoS hardness results to extended SDP formulations, it is shown that:
+\begin{lemma}\label{lemma:1}
+  The last reduction in \cref{thm:5} is additionally embedding.
+\end{lemma}
+Whence using the pattern matrix analysis techniques of \cite{lee2014lowerboundssizesemidefinite} to bound the dimension of approximate SDP extended formulations for \textsc{QMA(2)-Honest} combined with \cref{lemma:1} shows \cref{thm:1}.
+
+Next, to show \cref{thm:2} it is shown that:
+\begin{lemma}\label{lemma:2}
+  Let $d = \dim(\mcK)$. An $(\eps, \delta)$ approximate disentangler $\Lambda : \Dens(\mcH) \to \Dens{\mcK \otimes \mcK}$ with $\eps + \delta < 1/\poly(d)$ induces an extended SDP formulation to $h_{\Sep^2(d)}$ of size $\dim(\mcH)$.
+\end{lemma}
+Then \cref{thm:1} combined with this above lemma gives lower bounds on the dimension of $\mcH$ necessary for an approximate disentangler to exist.
+
+It should be noted that ETH-based hardness results do not require $\Omega$ in the dimension and have $\eps + \delta < O(1)$. These costs are incurred in the LRS reduction of SoS hardness to extended SDP formulation hardness.
+
+The proofs for \cref{thm:3,thm:4} follow a similar pattern, except using the chain of reductions:
+\begin{lemma}\label{lemma:3}
+  There exists a sequence of reductions:
+  \[\textsc{3XOR} \imps \omega_{\textsc{honest classical}} \imps \omega_{\text{entangled}}\]
+  The second of which is embedding.
+\end{lemma}
+The above follows work in \cite{ito2008oracularizationtwoproveroneroundinteractive} with careful analysis to show that it is additionally embedding in order to once again apply LRS techniques to $\omega_{\textsc{honest classical}}$.
+
+\section{Potential Applications}
+I believe that the most interesting of the contributions provided is actually in the formulation of the optimization problem reduction framework.
+In this report I have reformulated their results in a categorical flavour, and as such would like to ask similarly inspired questions.
+
+\begin{conjecture}
+Is \textsc{3XOR} initial in the subcategory of SoS approximation-hard problems?
+\end{conjecture}
+Where initial refers to the existence of a morphism to every object in the category.
+We ask this because it seems that \textsc{3XOR} reduces to many SoS approximation-hard problems.
+Alternatively,
+\begin{conjecture}
+Does there exist an initial object in the subcategory of SoS approximation-hard problems?
+\end{conjecture}
+If there were to exist such an initial object it would seemingly suggest that any SoS approximation-hard problem must be capable of modelling problems from this initial object.
+In particular, this would suggest a certain structure that any SoS approximation-hard problem must encapsulate.
+It would be interesting if this were to be the case but it seems much more reasonable that there are differing SoS-hard structures.
+
+In order to produce tight SoS-degree and error bounds, the LRS procedure was applied to intermediate steps.
+\ie \textsc{QMA(2)-Honest} and $\omega_{\textsc{classical honest}}$ in \cref{thm:1,thm:3}.
+It is unclear to me why it is neccessary to extract no-go results from intermediate problems.
+At the very least, \textsc{3XOR} was initial for all discussed problems in this paper.
+An LRS approach for a no-go result to \textsc{3XOR} would provide relevant bounds for every reduction without having to do each individually.
+Weakness in the results may then be indicative of unexploited structure in reductions which may lead to stronger results.
+It would be interesting to do a deeper analysis to see where such issues may arise.
+
+It is worth noting that the LRS approach at least for \cref{thm:2} provides bounds which are slightly weaker than ETH-assumption based hardness results.
+This gap may be due to either falseness of the ETH, or a suggestion of improvements to the LRS technique.
+Additionally, with such improvements to the LRS technique it may be the case that its application to \textsc{3XOR} provides a wide class of no-go approximation results for extended SDP formulations if \textsc{3XOR} were to be initial.
+
+\begin{conjecture}
+Does there exist a final object in the subcategory of SoS approxi-mation-hard problems?
+\end{conjecture}
+This above is equivalent to a completeness property.
+It would also be interesting to investigate the intersection of these SoS approximation-hard problems with MAX-SNP problems introduced by \cite{PAPADIMITRIOU1991425}.
+It is noteworthy that there is a reduction presented which reduces \textsc{3XOR} to asking if a graph is 3-colourable, which is we may ask as a MAX-SNP problem.
+This is further reduced to a question about $h_{\Sep}$
+
+\begin{conjecture}
+Is the LRS procedure functorial?
+\end{conjecture}
+Where a functor is a morphism in the 2-category where the objects are the morphisms originally considered.
+We ask this because the LRS procedure seemingly provides a method which intakes an embedding morphism from an SoS-hard problem to a second problem in question and produces a morphism from the extended SDP formulations to the second problem.
+The original LRS construction seems to operate only on the subcategory of constraint satisfaction problems, but this paper by Harrow et al. extends their construction to two particular instances over the hypersphere.
+An categorical approach to extending LRS results may lead to a functorial approach in which one can conclude extended SDP formulation hardness from any SoS approach hardness.
+
+Furthermore, a bulk of the work presented in this paper was a rework of previously known results in order to fit them into this framework (see \cref{sec:criticisms}). 
+With wider acceptance of this framework it would seem that a lot of approximation results can be condensed into showing the existence of a family of approximate reductions.
+
+\section{Connections to CO671}
+We discuss a few connections to SDP approximations and the Unique Games Conjecture covered in CO 671:
+\subsection{SDP Approximations}
+The bulk of the paper essentially discusses unconditional bounds for the approximation capacity of SDPs in the context of quantum information.
+Though not the focus point of this particular paper, it makes heavy use of prior results relating to SDP relaxations to solve state separability problems and 
 
 \section{Criticisms}
 \label{sec:criticisms}

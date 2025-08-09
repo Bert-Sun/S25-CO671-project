@@ -773,7 +773,7 @@ It is furthermore also possible that the complexity notions each of the subcateg
 The value of producing these definitions is in their interpretation: approximate reductions are sound, embedding reductions are complete in a strong sense.
 This additional strength of the completeness of the reduction was required to reduce SoS integrality gaps to a larger class of SDP formulations.
 Additionally, the last definition provides a method to produce an integrality gap for a problem $\mathscr{B}$ given an appropriate reduction from $\mathscr{A}$ with a known integrality gap:
-\begin{proposition}
+\begin{proposition}\label{prop:2}
   Let $\mathscr{A}, \mathscr{B}$ be polynomial optimization problems. If $\mathscr{A}$ has a degree-$d^A$ value-$(c^A, s^A)$ integrality gap, and there exists a $(s^A, s^B)$-approximate, $(d^A, c^A, d^B, c^B)$-pseudo-solution preserving reduction $R$ from $\mathscr{A}$ to $\mathscr{B}$, then there exists a degree-$d^B$ value-$(c^B, s^B)$ integrality gap for $\mathscr{B}$.
 \end{proposition}
 \begin{proof}
@@ -815,6 +815,7 @@ The proofs for \cref{thm:3,thm:4} follow a similar pattern, except using the cha
 The above follows work in \cite{ito2008oracularizationtwoproveroneroundinteractive} with careful analysis to show that it is additionally embedding in order to once again apply LRS techniques to $\omega_{\textsc{honest classical}}$.
 
 \section{Potential Applications}
+\label{sec:applications}
 I believe that the most interesting of the contributions provided is actually in the formulation of the optimization problem reduction framework.
 In this report I have reformulated their results in a categorical flavour, and as such would like to ask similarly inspired questions.
 
@@ -868,16 +869,53 @@ An categorical approach to extending LRS results may lead to a functorial approa
 Furthermore, a bulk of the work presented in this paper was a rework of previously known results in order to fit them into this framework (see \cref{sec:criticisms}). 
 With wider acceptance of this framework it would seem that a lot of approximation results can be condensed into showing the existence of a family of approximate reductions.
 
+Finally, it is noted that solving $h_{\Sep}$ equivalent to solving the $2\to 4$ norm of a matrix \cite{Barak_2012}, defined as:
+\[\norm{A}_{2\to 4} \coloneq \sup_v \{\norm{Av}_q/\norm{v}_2\}\]
+Which is a particular case of the $2\to q$ norm of a matrix.
+It turns out that good approximations to the $2\to q$ for norm of a matrix for $q \ge 4$ would refute the Small-Set Expansion Conjecture, which is a relaxation of the UGC \cite{Barak_2012}.
+This paper rules out SDP approaches to $2\to 4$ norms and perhaps may be generalized for arbitrary $q \ge 4$ unconditionally, where previous known approaches only gave ETH-based bounds.
+
 \section{Connections to CO671}
 We discuss a few connections to SDP approximations and the Unique Games Conjecture covered in CO 671:
 \subsection{SDP Approximations}
 The bulk of the paper essentially discusses unconditional bounds for the approximation capacity of SDPs in the context of quantum information.
 Though not the focus point of this particular paper, it makes heavy use of prior results relating to SDP relaxations to solve state separability problems and SDP approximations to quantum commuting value of a non-local game.
-The Lov\'asz-Schrijver hierarchy was studied in class, but admits refinements by the Lasserre (SoS) hierarchy \cite{laurent2003comparison}.
+The Lov\'asz-Schrijver (LS) hierarchy was studied in class, but admits refinements by the Lasserre (SoS) hierarchy \cite{laurent2003comparison}.
+
+Since the Lasserre refinements are contained in the Lova\'sz-Schrijver refinements, the results obtained on the SoS techniques apply to the LS lift as well.
+If one were strictly curious about the performance of the LS lifts it may even be possible to produce larger integrality gaps, along with requiring a lower degree/level of lift.
+
+In fact, the LRS technique applied to particular boolean CSP problems makes use of the non-negative rank, $\rank_+$ as defined in the lecture series on extension complexity, in order to lower bound the dimension of extended formulations and thus should be viewed as lower bounds on the dimension of lifted representations of boolean CSP polytopes which generalizes Yannakakis' work \cite{yannakakis1988expressing}.
+Additional work presented in class by Fiorini, Massar, Pokutta, Tiwang, and de Wolf \cite{fiorini2015exponential} on generalizing TSP, STAB, and CUT polytopes similarly fall under this larger umbrella of boolean CSP problems.
+
+It should be noted however, that the LRS technique only provides a \emph{sub-exponential} lower-bound on the extension complexity, unlike work by Rothvo\ss\, giving an exponential bound \cite{rothvoss2013some} on some 0,1-polytopes.
+
+\subsection{Unique Games Conjecture}
+It was mentioned above in \cref{sec:applications} that deciding the separability of a given density matrix is closely related with the SSE conjecture, which in turn is a relaxation of the UGC.
+This paper gives unconditional hardness of approximation results for the $2\to 4$ norm of a matrix, but it remains to be seen if this can be generalized to arbitrary $q \ge 4$.
+If such results would hold then this would give strong unconditional evidence towards the SSE conjecture.
+It is not clear however that SDP approximations necessarily provide the best approach towards such norm approximations, however, so further work still must be done.
+
+\subsection{Convex Algebraic Geometry}
+Though not a staple of the paper either, the entirety of the work depends on the algebraicity of the underlying feasible set being representable as an affine variety.
+The true connection likely lies in the weeds of the LRS proof.
 
 \section{Criticisms}
 \label{sec:criticisms}
-uwu
+The largest criticism I have for this work is the presentation of the optimization problem framework.
+Many definitions are made and explanations are made for one might care for these definitions (see \cref{prop:2}) after which the language is essentially never used again.
+A particular nitpick is in \cref{thm:5} in which I had to reverse engineer values to put their proof into the language of the framework that is presented the section before.
+In the original language, each proof only exhibits an integrality gap for each problem in the chain of reductions but each reduction indeed encapsulates a $*$-approximate, $*$-pseudo-solution preserving reduction from which the integrality gap of the next problem in the chain is deduced from.
+
+It is unclear to me why the framework is going to be introduced if the remainder of the work is not going to be framed as so.
+Specifically, each reduction produces a proposition stating that ``there exists a degree-$\Omega(n)$ value-$(1,\eps)$ integrality gap'' rather than a statement of existence of the appropriate category of reduction.
+The entirety of the definitions are practically ditched in favour of the language of preexisting reduction proofs.
+I might even go as far as to say that the work may not have gotten the recognition due to how verbose and difficult to parse.
+
+There is no criticism about the ideas, however, as a nice reframing of their presentation provides some interesting questions in \cref{sec:applications}.
+Reading the paper as it is feels like searching for a needle in a haystack for the actually interesting contributions.
+In particular, ``slight tweaks'' to previously known reductions which allow one to nicely show a degree-preserving property might better belong in an appendix in order to properly highlight the novel work done with respect to a novel technique which allows LRS ideas to be applied in non-boolean domains.
+
 % \section{Conclusion and Outlook}
 % \label{sec:outlook}
 % \lipsum[1-2]
